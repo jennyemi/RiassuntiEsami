@@ -430,3 +430,133 @@ Estensioni:
 - WS Security
 - XMPP
 - Altri...
+
+# **Firewall**
+Un **firewall** (letteralmente porta tagliafuoco) è un dispositivo di rete che **filtra tutto il traffico** che lo attraversa in base a una specifica politica d’accesso (**policy**).
+- Protegge gli host di una rete fidata dal traffico ostile proveniente da una rete esterna o pubblica.
+- Affinché possa svolgere in modo corretto il proprio compito deve essere collocato al confine delle due reti e rappresentare l’unico punto di accesso alla rete da proteggere : non deve essere possibile scavalcare il firewall tramite altri punti d’accesso (es. rete).
+
+>Attenzione: **il compito** dei firewall **è stabilire quale traffico deve essere autorizzato non controllare che il traffico permesso non sia dannoso** : a questo scopo sono dedicati altri dispositivi.
+
+I firewall possono essere realizzati in diversi modi:
+1. apparato di rete specifico.
+2. implementazione all’interno di un router.
+3. implementato in un computer dedicato connesso con due schede di rete.
+4. i "personal firewall": applicazioni software installate sugli host o sui server, spesso integrate nel sistema operativo, che hanno il compito di filtrare il
+traffico in ingresso e in uscita dal sistema specifico.
+
+I firewall possono essere di tipo diverso:
+- Packet filtering firewall (stateless filtering)
+- Stateful packet inspection firewall
+- Application level firewall
+
+>Il firewall realizza una separazione in zone con diverso grado di sicurezza all’interno di una rete
+
+I firewall hanno una diversa complessità (e costo ) a seconda del tipo di servizio implementato e del livello a cui lavorano nello stack di rete.  
+I firewall più semplici di tipo packet filter lavorano a livello di rete oppure a livello di rete/ trasporto.  
+I firewall di livello applicativo lavorano a livello applicativo.
+
+### **Packet filtering firewall**
+>Questo tipo di firewall applica un filtro basato sui parametri contenuti negli header di livello rete e/o di livello trasporto, ogni pacchetto viene valutato in modo indipendente senza tener conto di quelli che lo hanno preceduto.
+
+A livello rete : vengono controllati soltanto gli indirizzi IP mittente e destinatario.
+
+A livello di trasporto : il controllo viene effettuato sui parametri dell’ header di livello trasporto (es. flag SYN, flag ACK, source port , destination port).
+
+Sono firewall efficienti in termini di performance, spesso questa funzionalità viene svolta dal border router.
+
+### **Stateful Packet inspection firewall**
+>Si tiene traccia dello stato del sistema e il filtraggio avviene considerando il traffico precedente con informazioni contenute in una tabella fidata delle connessioni.
+
+Si può autorizzare, per esempio, il traffico in ingresso correlato a una precedente apertura di connessione in uscita.
+
+Se un host della rete ha aperto una connessione in uscita verranno
+autorizzati i pacchetti in entrata riferiti a quella connessione il cui stato sarà ESTABLISHED.
+
+### **Application level firewall**
+>I firewall di questa categoria operano un filtraggio di livello applicativo (detti anche deep packet inspection o proxy firewall).
+
+Si comportano da **proxy applicativi**: intercettano la connessione, estraggono la parte dati del pacchetto, la esaminano e in caso di traffico autorizzato la inviano al destinatario.
+
+Solitamente con metodi basati su pattern matching di stringhe o anomaly detection (analisi statistica per rilevare anomalie nel traffico).
+
+Sono firewall meno efficienti in termini di performance: per ottenere buone prestazioni (elevata larghezza di banda).
+
+### **Access Control List (ACL)**
+>**ACL** (Access Control List): è una lista di istruzioni che devono essere considerate per stabilire se i pacchetti devono essere ammessi o scartati.
+
+Nell’applicazione delle regole l’approccio è di tipo TOP-DOWN: la prima regola verificata interrompe il processo e porta alla decisione (normalmente l’ultima regola è la regola di default)
+
+Per il **filtraggio** di tipo **stateless**: ogni pacchetto viene quindi esaminato singolarmente, indipendentemente dai pacchetti precedentemente ricevuti e da quelli successivi
+
+Le ACL possono essere realizzate utilizzando due strategie:
+- **Default Deny**: tutto il traffico non autorizzato esplicitamente viene scartato.
+- **Default Permit**: tutto il traffico non esplicitamente scartato (presenza di una specifica regola di diniego) viene autorizzato.
+
+**Principio del minimo privilegio**: ogni attore dispone del minimo dei privilegi necessari per raggiungere gli obiettivi assegnatigli dalle specifiche del sistema.
+
+**Preferire** l’approccio **default deny** con una configurazione del firewall più stringente possibile ma che permetta l’erogazione dei servizi richiesti.
+|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
+|--------|--------|--------|--------|--------|--------|--------|--------|
+|...|...|...|...|...|...|...|...|
+- **Varibili**: è molto diffuso l’uso delle variabili nelle ACL per indicare indirizzi IP (singoli o intere sottoreti); questo consente la modifica dei valori senza dover modificare la politica (es. INTERNA:= 192.168.0.0/24).
+- **Verso**: IN / OUT oppure l’indicazione delle zone sorgente e destinazione precedentemente definite in variabili.
+- **IP Sorgente/IP Destinazione**: IP da analizzare (livello rete).
+- **Porta sorgente/porta destinazione**: porte da analizzare (livello transporto).
+- **Ack**: 0 (aperture di connessione, SYN=1, ACK=0), 1 (no pacchetti di apertura connessione) o 0/1 (tutto il traffico).
+- **Azione**: Deny/Permit
+
+### **Esempio TELNET**
+Vogliamo definire una ACL autorizzare solo connessioni Telnet dall’interno della rete aziendale verso uno specifico server telnet e bloccare il resto del traffico
+
+Definire le variabili: INTERNA = 172.16.0.0/12, ESTERNA = not (INTERNA), ANY = Qualsiasi e TELNET_SERVER = 154.45.3.11  
+Telnet è un protocollo di livello applicativo che utilizza una sola connessione TCP su porta 23 lato server, e porta alta (>1023)lato client.
+
+|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
+|--------|--------|--------|--------|--------|--------|--------|--------|
+|OUT|INTERNA|TELNET_SERVER|TCP|>1023|23|1/0|Permit|
+|IN|TELNET_SERVER|INTERNA|TCP|23|>1023|1|Permit|
+|ANY|ANY|ANY|TCP|ANY|ANY|ANY|DENY|
+
+Se il protocollo di livello trasporto considerato è TCP, definire il valore del flag ACK nelle ACL è importante per ottenere politiche restrittive.
+
+### **Zone di sicurezza: DMZ**
+I firewall consentono di definire delle politiche di accesso realizzando una separazione in zone aventi diverso grado di sicurezza nell'architettura di rete.
+>**DMZ** (DeMilitarized Zone o screened subnet): area della rete accessibile dall’esterno della rete il cui traffico viene controllato da un firewall e in cui vengono posti i server che offrono servizi agli utenti esterni (es. Web server, application server, SMTP server, …)
+
+La DMZ ha un grado di sicurezza diverso dalla rete interna che deve essere protetta da accessi indesiderati.  
+**I server contenenti dati privati devono essere posizionati sulla rete interna**.
+
+Dalla DMZ viene bloccato ogni tentativo di accedere alla rete interna.  
+Si possono realizzare più zone DMZ con diversi requisiti di sicurezza oppure si può connettere allo switch ciascuna macchina in DMZ su una VLAN differente per evitare che la compromissione di
+una macchina porti alla compromissione delle altre (aumenta la complessità di gestione).
+
+La realizzazione della DMZ con due firewall (zona cuscinetto) rende la DMZ accessibile sia dalla rete interna sia dalla rete esterna.
+
+### **Zone di sicurezza: bastion host**
+>Alcune architetture prevedono la presenza di un **Bastion host**: un nodo particolarmente protetto e capace di difesa prolungata che può essere lasciato al nemico senza danni per la rete interna .
+
+Il Bastion host ospita generalmente un **proxy server** e viene **privato** di tutti **i servizi** non essenziali (come applicazioni, demoni ed utenti) per ridurre al minimo la minaccia di infezione del sistema stesso attraverso falle del software stesso.
+
+Due principali architetture:
+- **Single homed bastion host** = il firewall fa passare i pacchetti provenienti dall’esterno e diretti al bastion host, i pacchetti provenienti dall’esterno e diretti ad un server che non ha un livello di sicurezza elavato e i pacchetti provenienti dal bastion host e diretti verso l’esterno.  
+Il traffico viene analizzato due volte, ma se il packet filter viene compromesso , il traffico esterno può raggiungere la rete interna.
+- **Double homed bastion host** = previene i problemi causati dalla compromissione del packet filter perché un pacchetto deve “fisicamente” attraversare il bastion host.
+
+### **Proxy**
+>Un proxy è un componente che media le comunicazioni tra due altri componenti.  
+Disaccoppia la comunicazione rendendola indiretta.  
+Agisce sia da client (rispetto al server originale) che da server (rispetto al client originale).
+
+Esistono diverse tipologie di proxy:
+- **Web proxy**: caching di pagine web con memorizzazione delle pagine richieste dagli utenti della rete interna.
+- **Anonymizing proxy**: servizi di anonimia del traffico web.
+- **Reverse proxy**: mediano l’accesso di utenti esterni a risorse interne.
+- **Proxy firewall**: mediano connessioni applicative, gestiscono aspetti di sicurezza dei protocolli e scartano traffico sulla base del contenuto applicativo.
+
+### **Reverse proxy**
+1. Connessione da utente esterno verso il Web Server.
+2. Redirezione della connessione verso il Reverse Proxy.
+3. Autenticazione, verifica, filtraggio, …
+4. Inoltro verso il web server.
+
