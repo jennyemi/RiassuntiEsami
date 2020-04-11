@@ -1,5 +1,130 @@
+# **Integrità e autenticazione del messaggio**
+>Non è possibile per due persone comunicare in modo sicuro su un canale sicuro utilizzando la crittografia.
+
+Non viene garantità ne l'integrità (messaggio intercettato da terzi e riutilizzato da quest'ultimi) ne l'autenticazione (no vi è sicureza sull'identità del mittente).
+
+Problemi:
+- I contenuti dei file sono poco legati fra loro.
+- Uso di block chipers
+
+Si ricorre a una one-way function, detta anche **hash function**, **checksum** o **message digest**; i dati in input di lunghezza arbitraria vengono trasformati output di lunghezza costante.  
+h: {0, 1}*--> {0, 1}^n  
+One-way = irreversibile  
+- Dato x è facile calcolare h(x)
+- Dato y è difficile trovare x t.c. y = h(x) [Preimage resistence]
+- Dato m è difficile trovare m' t.c. h(m)=h(m') [Second preimage resistence]
+
+Collision-resitance: difficile trovare m, m' distinti t.c. h(m)=h(m')  
+Una piccola modifica di m altera tutto h(m)----> Effetto valanga
+
+### **Il paradosso del compleanno**
+In crittografia usato per il **dimensionamento del blocco da cifrare** e **provare le proprietà di resistenza alle collisioni**.  
+Utilizza codici hash di 64 bit (collisione fra m e m' con circa 2^32 tentativi).  
+Di solito la dimensione dei codici hash è di 160 bit (SHA 1), il tempo di collisione è di 2^80 tentativi.  
+
+Viene utilizzato il termine paradosso perchè la verità matematica contraddice l'intuizione naturale.
+
+Che probabilità c'è che due persone nella stessa stanza compiano gli anni lol stesso giorno?
+- In un gruppo di 23 persone 51%
+- Da 30 più del 70%
+- Da 50 il 97%
+
+### **Algoritmi crittografici di hashing**
+Un buon algoritmo di **message digest** deve essere veloce da calcolare per non sovraccaricare troppo i sistemi su cui viene utilizzato e, soprattutto, deve essere difficile da invertire, ossia deve essere praticamente impossibile, partendo dal digest ,
+ricostruire il messaggio originale.  
+Molto spesso gli algoritmi di digest vengono utilizzati non soltanto per proteggere i dati, ma anche in unione con algoritmi a chiave pubblica, perché, visto che questi algoritmi sono lenti, facendoli operare non sui dati originali ma sul loro «riassunto», questi algoritmi diventano più veloci.  
+Gli algoritmi più usati sono:
+- **MD5** che opera su blocchi dati da 512 bit e genera un hash da 128 bit.
+- **SHA 1** opera su blocchi dati da 512 bit e genera un hash da 160 bit
+### **Requisiti di una funzione di hash**
+- È facile calcolare l’hash di un messaggio.
+- È difficile trovare il messaggio che ha generato un dato hash (non invertibilità delle funzioni di hash), **si dice che la
+funzione è one-way hash**.  
+- È difficile modificare un messaggio senza modificare il relativo hash (resistenza debole alle collisioni).  
+- È difficile trovare due messaggi che abbiano lo stesso hash
+(resistenza forte alle collisioni).
+
+### **Utilizzi di una funzione di hash**
+- **Controllo degli errori**: in questo caso la funzione di hash viene utilizzata come un checksum, per identificare eventuali errori di trasmissione dei dati.
+- **Integrità dei dati**: utilizzato ad esempio negli IDS (intrusion detection systems) per controllare l’integrità dei file critici di un sistema operativo.
+- **Memorizzazione di password e autenticazione**: nella maggior parte dei casi, quando un sistema informatico deve memorizzare una password, questa non viene salvata in chiaro per motivi
+di sicurezza, né viene cifrata per evitare che sia possibile risalire alla password originale. Si memorizza in questi casi l’ hash della password con l’aggiunta di un valore detto salt e di un eventuale ulteriore valore detto pepper.
+- **Firme digitali**: firmare solo un hash del documento secondo il noto paradigma hash then sign : ossia si calcola prima hash di un documento e poi si applica la firma digitale non a tutto il documento ma solo all’ hash dello stesso.
+
+### **Algoritmo MD5**
+- Digest da 128 bit 16 bytes.
+- Creato da Ronald Rivest nel 1991.
+>È diffuso anche come supporto per l'autenticazione degli utenti
+attraverso i linguaggi di scripting Web server side (il linguaggio
+PHP implementa nativamente la funzione MD5).
+- È stato ampiamente usato fino a quando sono state dimostrate
+alcune sue debolezze crittografiche per le quali non è più
+considerato sicuro in applicazioni critiche
+Funzionamento:
+- Il messaggio viene diviso in blocchi da 512 bit.
+- Ogni blocco viene elaborato in 4 “round” successivi.
+- In ogni round la funzione di compressione (suo uso concatenato ha il compito di “comprimere” l’informazione di un messaggio in un
+numero minore di bit), viene applicata 16 volte.
+- La funzione F dipende dal round
+- Mi (secondo sotto blocco dell'imagine delle slide) è un sottoblocco di 32 bit.
+- Ki è una costante che cambia a seconda del round.
+### **Algoritmo SHA (Secure Hash Algorithm)**
+Famiglia di funzioni crittografiche di hash sviluppate dalla National Security Agency (e pubblicate come standard federale dal governo degli USA).  
+Usato dal governo USA all'interno del suo sistema di firma digitale.
+>Gli algoritmi della famiglia sono denominati SHA 1 , SHA 224 , SHA
+256 , SHA 384 e SHA 512 : le ultime 4 varianti sono spesso indicate
+genericamente come SHA 2 , per distinguerle dal primo.  
+Il primo produce un **digest del messaggio** di soli 160 bit, mentre gli altri producono digest di lunghezza in bit pari al numero indicato nella loro sigla.  
+
+- L'SHA 1 è il più diffuso algoritmo della famiglia SHA ed è utilizzato in numerose applicazioni e protocolli.
+- SHA 3 (Secure Hash Algorithm 3) è l'ultimo membro della famiglia di standard Secure Hash Algorithm, rilasciato dal NIST il 5 agosto 2015.
+- L’abbassamento dei costi accompagnato da maggiori potenze di calcolo ha reso l’SHA 1 veramente pericoloso per la sicurezza dei sistemi. I ricercatori raccomandano per questo che ci sia quanto prima una migrazione verso SHA 2 o SHA 3, i principali browser hanno programmato di smettere di accettare le firme basate su SHA 1 a partire da gennaio del 2017.
+Funzionamento:
+- Il messaggio viene elaborato in blocchi di 512 bit (16 word da 32 bit)  
+Vi sono 4 fasi da 20 passi:
+- le 16 word sono espanse a 80 word tramite operazioni di miscelazione e duplicazione.
+- L’output è sommato all’input per ottenere il nuovo valore
+dei buffer.
+> **Il codice hash è il valore finale del buffer**
+### **Crittografia e autenticazione**
+Le funzioni hash non garantiscono l'autenticazione.
+
+One-way function 2 famiglie:
+- Non-keyed (senza chiave)  
+h: {0,1}*--->{0,1}^n (e. g. n = 160);  
+h(m) è ilmessage digest di m;  
+Usato per Integrety, firme digitali...  
+Esempi: MD4, MD5 (Message digest. 128 bit digest), SHA/SHS (Secure Hash Algorithm or Standard, 160 bit digest)
+- Keyed (con chiave)  
+**h**k(k piccola):{0,1}*--->{0,1}^n (e. g. n = 96);  
+Usato per message integrity e authentication
+### **MAC Message Authentication Code**
+Si tratta di una **One-way keyed function**, richiede una chiave segreta condivisa.
+Utilizzo:
+- Il mittente spedisce il messaggio m e M1=MAC(m)
+-Il destinatario riceve entrambe le parti
+- Il destinatario calcola M2=MAC(m)  
+Se M2 == M1 il messaggio è valido  
+Se M2 != M1 il messaggio è corrotto
+
+Il MAC viene utilizzato per l'integrità, non per la segretezza.
+
+Nel file system:
+|............FILE............|hpwd(pwd in piccolo)(file)|
+- Il MAC viene verificato quando si vuole accedere al file
+-La pwd è la password necessaria per modificare il file
+
+Il MAC è sostanzialmente un checksum crittografico: condensa un messaggio di lunghezza variabile, utilizza una data chiave segreta K e il MAC ha lunghezza fissa.
+>Il MAC in cui si utilizza anche una funziona di Hash viene più
+propriamente denominato HMAC (Hash based MAC).
 # **Firma digitale**
-La **firma digitale**, equivalente elettronico della firma autografa su carta, è associata stabilmente al documento elettronico sulla quale è apposta e ne attesta con certezza l’integrità, autenticità e la non ripudiabilità.
+La **firma digitale**, equivalente elettronico della firma autografa su carta, è associata stabilmente al documento elettronico sulla quale è apposta e ne attesta con certezza l’integrità, autenticità e la non ripudiabilità. Crittografia assimetrica e ottiene solo **autenticazione** e **integrità**.
+
+La firma digitale viene utilizzata per garantire l’ autenticità
+di un messaggio (provenienza dall’utente dichiarato), senza
+ricorrere alla crittazione dell’intero messaggio, utilizzando la
+chiave privata del mittente e permettendo al destinatario di
+verificare tale autenticità.
 
 Per generare una firma digitale è necessario un **kit** (dispositivo + software).
 Il file firmato digitalmente **deve** essere **certificato** dall’ente certificatore prima dell’invio.
@@ -15,6 +140,31 @@ Si può verificare che una chiave pubblica sia autentica
 
 **Soluzione**: autorità di certificazione (Certification Authority (CA)) e il sistema dei certificati.
 
+La firma digitale di un documento ha dimensione limitata (es:
+128 bit) indipendentemente dalla dimensione del documento.  
+Tra gli algoritmi più noti per la firma digitale ci sono una con schema basato su RSA (attaccabile sfruttando la proprietà di omomorfismo, la sicurezza dello schema dipende dalle proprietà di sicurezza della funzione hash utilizzata per applicare il paradigma hash then sign ) e Digital Signature Algorithm (DSA) che è uno standard FIPS per la firma digitale proposto dal National Institute of Standards and Technology (NIST) impiegato nel Digital Signature Standard (DSS).
+
+Funzioni:
+- Per firmare: Sign(key^-1, m)
+- Per verificare: Verify(Key, x, m) ----> OK se x = Sign(key^-1, m)
+
+Resistente alla contraffazione:
+-Non si riesce a calcolare Sign(key^-1, m) da m e key
+- Resiste all'attacco a forza brutta
+
+### **Creazione della firma**
+1. Calcolare il messagge digest del testo
+2. Codificare il digest con la chiave privata del mittente (firma digitale)
+3. Creare copia (testo + firma) e spedirla
+### **Verifica della firma**
+1. Separare il testo dall firma
+2. Decodificare la firma con la chiave pubblica del mittente
+3. Calcolare il digest del testo
+4. Verificare che i due digest coincidano
+### **Hashing vs MAC vs Firme digitali**
+- Hashing: checksum privata... produce il footprint di un messaggio e deve venire memorizzata separatamente dal messaggio.
+- MAC: checksum cifrata... il footprint viene protetto da un a chiave condivisa e segreta e può essere trasmesso lungo un canale pubblico.
+- Firma digitale: non-repudiaton... il footprint viene protetto da una chiave privata e non ci sono dati segreti con chi verifica la firma.
 # **Certificati digitali**
 Una terza parte fidata, l’autorità di certificazione (**CA**), certifica/attesta il legame utente/chiave pubblica mediante apposito certificato digitale, e garantisce che la chiave pubblica di qualcuno, ottenuta da un registro pubblico, sia stata rilasciata proprio da quella persona.
 
