@@ -432,7 +432,7 @@ Estensioni:
 - Altri...
 
 # **Firewall**
-Un **firewall** (letteralmente porta tagliafuoco) è un dispositivo di rete che **filtra tutto il traffico** che lo attraversa in base a una specifica politica d’accesso (**policy**).
+Un **firewall** (letteralmente porta tagliafuoco) è un dispositivo di rete che **filtra tutto il traffico** che lo attraversa in base a una specifica politica d’accesso (**policy**). Si trova al confine fra due reti e tutto il traffico in transito tra le due reti deve passare attraverso di esso.  
 - Protegge gli host di una rete fidata dal traffico ostile proveniente da una rete esterna o pubblica.
 - Affinché possa svolgere in modo corretto il proprio compito deve essere collocato al confine delle due reti e rappresentare l’unico punto di accesso alla rete da proteggere : non deve essere possibile scavalcare il firewall tramite altri punti d’accesso (es. rete).
 
@@ -447,14 +447,32 @@ traffico in ingresso e in uscita dal sistema specifico.
 
 I firewall possono essere di tipo diverso:
 - Packet filtering firewall (stateless filtering)
-- Stateful packet inspection firewall
-- Application level firewall
+- Stateful packet inspection firewall (Forwarding gateway(?))
+- Application level firewall (Proxy(?))
 
 >Il firewall realizza una separazione in zone con diverso grado di sicurezza all’interno di una rete
 
 I firewall hanno una diversa complessità (e costo ) a seconda del tipo di servizio implementato e del livello a cui lavorano nello stack di rete.  
 I firewall più semplici di tipo packet filter lavorano a livello di rete oppure a livello di rete/ trasporto.  
-I firewall di livello applicativo lavorano a livello applicativo.
+I firewall di livello applicativo lavorano a livello applicativo.  
+Quindi:  
+- a livello applicativo (application gateway, proxy)
+- a livello di trasporto (circuit gateway)
+- a livello rete (packet lter)
+>Esistono anche ibridi: dynamic packet filter agiscono a livello rete e trasporto (e talvolta anche applicativo).
+Possono essere realizzati via software o hardware (più veloci,
+ma più costosi e meno flessibili nelle congurazioni).
+
+|Rete Esterna|router|gatekeeper|gate|mailgate|Rete Interna|
+- **Gatekeeper proxy applicativo**: raccoglie le richieste
+applicative (Telnet, FTP, SMTP, ...) dall'interno e le manda verso l'esterno.
+- **Gate**: filtra il traffico.
+
+Grazie al firewall:
+- In tutte le sottoreti si possono definire politiche di accesso.
+- Solo i componenti esterni al firewall sono direttamente accessibili.
+- Possibile regolare la direzionalità delle connessioni.
+- Realizza una separazione in zone
 
 ### **Packet filtering firewall**
 >Questo tipo di firewall applica un filtro basato sui parametri contenuti negli header di livello rete e/o di livello trasporto, ogni pacchetto viene valutato in modo indipendente senza tener conto di quelli che lo hanno preceduto.
@@ -466,13 +484,19 @@ A livello di trasporto : il controllo viene effettuato sui parametri dell’ hea
 Sono firewall efficienti in termini di performance, spesso questa funzionalità viene svolta dal border router.
 
 ### **Stateful Packet inspection firewall**
->Si tiene traccia dello stato del sistema e il filtraggio avviene considerando il traffico precedente con informazioni contenute in una tabella fidata delle connessioni.
+>Si tiene traccia dello stato del sistema e il filtraggio avviene considerando il traffico precedente con informazioni contenute in una **tabella** fidata delle connessioni, avviene
+quindi sulla storia dei pacchetti o delle richieste.
 
 Si può autorizzare, per esempio, il traffico in ingresso correlato a una precedente apertura di connessione in uscita.
 
-Se un host della rete ha aperto una connessione in uscita verranno
-autorizzati i pacchetti in entrata riferiti a quella connessione il cui stato sarà ESTABLISHED.
+Se un host della rete ha aperto una connessione in uscita verranno autorizzati i pacchetti in entrata riferiti a quella connessione il cui stato sarà **ESTABLISHED**.
 
+Questa tecnica è più onerosa ma flessibile.
+
+Operano un filtraggio applicativo analizzando il contenuto dei pacchetti e vengono talvolta detti **deep packet filters**.
+- Analisi del traffico applicativo, la cui liceità va valutata
+caso per caso
+- Generalmente basati su pattern matching di stringhe
 ### **Application level firewall**
 >I firewall di questa categoria operano un filtraggio di livello applicativo (detti anche deep packet inspection o proxy firewall).
 
@@ -481,44 +505,8 @@ Si comportano da **proxy applicativi**: intercettano la connessione, estraggono 
 Solitamente con metodi basati su pattern matching di stringhe o anomaly detection (analisi statistica per rilevare anomalie nel traffico).
 
 Sono firewall meno efficienti in termini di performance: per ottenere buone prestazioni (elevata larghezza di banda).
-
-### **Access Control List (ACL)**
->**ACL** (Access Control List): è una lista di istruzioni che devono essere considerate per stabilire se i pacchetti devono essere ammessi o scartati.
-
-Nell’applicazione delle regole l’approccio è di tipo TOP-DOWN: la prima regola verificata interrompe il processo e porta alla decisione (normalmente l’ultima regola è la regola di default)
-
-Per il **filtraggio** di tipo **stateless**: ogni pacchetto viene quindi esaminato singolarmente, indipendentemente dai pacchetti precedentemente ricevuti e da quelli successivi
-
-Le ACL possono essere realizzate utilizzando due strategie:
-- **Default Deny**: tutto il traffico non autorizzato esplicitamente viene scartato.
-- **Default Permit**: tutto il traffico non esplicitamente scartato (presenza di una specifica regola di diniego) viene autorizzato.
-
-**Principio del minimo privilegio**: ogni attore dispone del minimo dei privilegi necessari per raggiungere gli obiettivi assegnatigli dalle specifiche del sistema.
-
-**Preferire** l’approccio **default deny** con una configurazione del firewall più stringente possibile ma che permetta l’erogazione dei servizi richiesti.
-|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
-|--------|--------|--------|--------|--------|--------|--------|--------|
-|...|...|...|...|...|...|...|...|
-- **Varibili**: è molto diffuso l’uso delle variabili nelle ACL per indicare indirizzi IP (singoli o intere sottoreti); questo consente la modifica dei valori senza dover modificare la politica (es. INTERNA:= 192.168.0.0/24).
-- **Verso**: IN / OUT oppure l’indicazione delle zone sorgente e destinazione precedentemente definite in variabili.
-- **IP Sorgente/IP Destinazione**: IP da analizzare (livello rete).
-- **Porta sorgente/porta destinazione**: porte da analizzare (livello transporto).
-- **Ack**: 0 (aperture di connessione, SYN=1, ACK=0), 1 (no pacchetti di apertura connessione) o 0/1 (tutto il traffico).
-- **Azione**: Deny/Permit
-
-### **Esempio TELNET**
-Vogliamo definire una ACL autorizzare solo connessioni Telnet dall’interno della rete aziendale verso uno specifico server telnet e bloccare il resto del traffico
-
-Definire le variabili: INTERNA = 172.16.0.0/12, ESTERNA = not (INTERNA), ANY = Qualsiasi e TELNET_SERVER = 154.45.3.11  
-Telnet è un protocollo di livello applicativo che utilizza una sola connessione TCP su porta 23 lato server, e porta alta (>1023)lato client.
-
-|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
-|--------|--------|--------|--------|--------|--------|--------|--------|
-|OUT|INTERNA|TELNET_SERVER|TCP|>1023|23|1/0|Permit|
-|IN|TELNET_SERVER|INTERNA|TCP|23|>1023|1|Permit|
-|ANY|ANY|ANY|TCP|ANY|ANY|ANY|DENY|
-
-Se il protocollo di livello trasporto considerato è TCP, definire il valore del flag ACK nelle ACL è importante per ottenere politiche restrittive.
+### **Scrrened subnet**
+Si usano due firewall per creare una zona di interdizione.
 
 ### **Zone di sicurezza: DMZ**
 I firewall consentono di definire delle politiche di accesso realizzando una separazione in zone aventi diverso grado di sicurezza nell'architettura di rete.
@@ -534,13 +522,13 @@ una macchina porti alla compromissione delle altre (aumenta la complessità di g
 La realizzazione della DMZ con due firewall (zona cuscinetto) rende la DMZ accessibile sia dalla rete interna sia dalla rete esterna.
 
 ### **Zone di sicurezza: bastion host**
->Alcune architetture prevedono la presenza di un **Bastion host**: un nodo particolarmente protetto e capace di difesa prolungata che può essere lasciato al nemico senza danni per la rete interna .
+>Alcune architetture prevedono la presenza di un **Bastion host**: un nodo particolarmente protetto e capace di difesa prolungata che può essere lasciato al nemico senza danni per la rete interna.
 
 Il Bastion host ospita generalmente un **proxy server** e viene **privato** di tutti **i servizi** non essenziali (come applicazioni, demoni ed utenti) per ridurre al minimo la minaccia di infezione del sistema stesso attraverso falle del software stesso.
 
 Due principali architetture:
 - **Single homed bastion host** = il firewall fa passare i pacchetti provenienti dall’esterno e diretti al bastion host, i pacchetti provenienti dall’esterno e diretti ad un server che non ha un livello di sicurezza elavato e i pacchetti provenienti dal bastion host e diretti verso l’esterno.  
-Il traffico viene analizzato due volte, ma se il packet filter viene compromesso , il traffico esterno può raggiungere la rete interna.
+Il traffico viene analizzato due volte, ma se il packet filter viene compromesso, il traffico esterno può raggiungere la rete interna.
 - **Double homed bastion host** = previene i problemi causati dalla compromissione del packet filter perché un pacchetto deve “fisicamente” attraversare il bastion host.
 
 ### **Proxy**
@@ -560,3 +548,118 @@ Esistono diverse tipologie di proxy:
 3. Autenticazione, verifica, filtraggio, …
 4. Inoltro verso il web server.
 
+# **Access Control List (ACL)**
+>**ACL** (Access Control List): fissa una politica di accesso, è una lista di istruzioni che devono essere considerate per stabilire se i pacchetti devono essere ammessi o scartati.
+
+Nell’applicazione delle regole l’approccio è di tipo TOP-DOWN: la prima regola verificata interrompe il processo e porta alla decisione (normalmente l’ultima regola è la regola di default)
+
+Per il **filtraggio** di tipo **stateless**: ogni pacchetto viene quindi esaminato singolarmente, indipendentemente dai pacchetti precedentemente ricevuti e da quelli successivi
+
+Le ACL possono essere realizzate utilizzando due strategie:
+- **Default Deny**: tutto il traffico non autorizzato esplicitamente viene scartato.
+- **Default Permit**: tutto il traffico non esplicitamente scartato (presenza di una specifica regola di diniego) viene autorizzato.
+
+**Principio del minimo privilegio**: ogni attore dispone del minimo dei privilegi necessari per raggiungere gli obiettivi assegnatigli dalle specifiche del sistema.
+
+**Preferire** l’approccio **default deny** con una configurazione del firewall più stringente possibile ma che permetta l’erogazione dei servizi richiesti.
+|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
+|--------|--------|--------|--------|--------|--------|--------|--------|
+|...|...|...|...|...|...|...|...|
+
+- **Varibili**: è molto diffuso l’uso delle variabili nelle ACL per indicare indirizzi IP (singoli o intere sottoreti); questo consente la modifica dei valori senza dover modificare la politica (es. INTERNA:= 192.168.0.0/24). Possono essere
+istanziate sulla specica topologia di rete.
+- **Verso**: IN / OUT oppure l’indicazione delle zone sorgente e destinazione precedentemente definite in variabili.
+- **IP Sorgente/IP Destinazione**: IP da analizzare (livello rete) o variabili precedentemente definite.
+- **Protocollo**: TCP, UDP, ICMP, IP.
+- **Porta sorgente/porta destinazione**: porte da analizzare (livello transporto).
+- **Ack**: 0 (aperture di connessione, SYN=1, ACK=0), 1 (no pacchetti di apertura connessione) o 0/1 (tutto il traffico).
+- **Azione**: Deny/Permit
+
+### **Protocolli firewall-friendly**
+Protocolli come Telnet, SSH, rlogin, etc. sono semplici da gestire:
+- Per loro natura implicano ruoli ben definiti del client e
+server.
+- Il pattern di scambio di messaggi è un semplice request/reply.
+In generale invece esistono protocolli molto più elaborati che
+richiedono politiche assai più sofisticate per applicare il LPP.
+### **Esempio TELNET**
+Vogliamo definire una ACL autorizzare solo connessioni Telnet dall’interno della rete aziendale verso uno specifico server telnet e bloccare il resto del traffico
+
+Definire le variabili: INTERNA = 172.16.0.0/12, ESTERNA = not (INTERNA), ANY = Qualsiasi e TELNET_SERVER = 154.45.3.11  
+Telnet è un protocollo di livello applicativo che utilizza una sola connessione TCP su porta 23 lato server, e porta alta (>1023)lato client.
+
+|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
+|--------|--------|--------|--------|--------|--------|--------|--------|
+|OUT|INTERNA|TELNET_SERVER|TCP|>1023|23|1/0|Permit|
+|IN|TELNET_SERVER|INTERNA|TCP|23|>1023|1|Permit|
+|ANY|ANY|ANY|ANY|ANY|ANY|ANY|DENY|
+
+Se il protocollo di livello trasporto considerato è TCP, definire il valore del flag ACK nelle ACL è importante per ottenere politiche restrittive.
+### **SSH con stateless filtering**
+La politica da implementare autorizza solo connessioni SSH dall'interno della rete aziendale verso l'esterno.
+
+Identichiamo SSH con i pacchetti TCP con porta destinazione 22 (si noti che talvolta si cambia la porta proprio per ragioni di sicurezza!)
+sshSrvs := 159.149.70.13 and 159.149.70.42
+|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
+|--------|--------|--------|--------|--------|--------|--------|--------|
+|OUT|INTERNA|sshSrvs|TCP|>1023|22|1/0|Permit|
+|IN|sshSrvs|INTERNA|TCP|22|>1023|1|Permit|
+|ANY|ANY|ANY|ANY|ANY|ANY|*|DENY|
+Si nota che i pacchetti provenienti dall'esterno della rete dovrebbero essere solo risposte del server: quindi ACK deve essere settato.  
+Inoltre solo alcuni server ssh potrebbero essere autorizzati.
+>Molto difficile da applicare: c'è una costante tensione fra essibilità e sicurezza.
+
+### **SMTP**
+Nella rete aziendale un solo server SMTP è autorizzato a gestire la posta elettronica con l'esterno.
+> **SMTP** è un protocollo firewall-friendly.  
+Client interni alla rete non passano per il firewall.
+Si vuole:
+- Scambiare posta elettronica: un Mail Server riceve e invia posta da e verso altri Mail Server.
+- Ricevere posta elettronica: altri Mail Server si connettono al Mail Server aziendale agendo da client.
+- Inviare posta elettronica: il Mail Server aziendale si connette ad altri Mail Server agendo da client.
+
+smtpSrv := 159.149.70.23  
+External := not(159.149.70.0/24)
+
+|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
+|--------|--------|--------|--------|--------|--------|--------|--------|
+|IN|External|smtpSrv|TCP|>1023|25|1/0|Permit|
+|OUT|smtpSrv|External|TCP|25|>1023|1|Permit|
+|OUT|smtpSrv|External|TCP|>1023|25|1|Permit|
+|IN|External|smtpSrv|TCP|25|>1023|1|Permit|
+|ANY|ANY|ANY|ANY|ANY|ANY|*|DENY|
+
+### **FTP Attivo**
+Non è un protocollo firewall-frindly
+- Primo scambio di messagi su porta 21 provenienti da una porta alta.
+- Poi dalla 20 verso una porta alta.
+|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
+|--------|--------|--------|--------|--------|--------|--------|--------|
+|OUT|Internal|External|TCP|>1023|21|1/0|Permit|
+|IN|External|Internal|TCP|21|>1023|1|Permit|
+|IN|External|Internal|TCP|20|>1023|1/0|Permit|
+|OUT|Internal|External|TCP|>1023|20|1|Permit|
+|ANY|ANY|ANY|ANY|ANY|ANY|*|DENY|
+
+### **FTP Passivo**
+- Primo scambio di messagi su porta 21 provenienti da una porta alta.
+- Viene comunicata dal server la porta alta su cui inviare i messaggi.
+
+|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
+|--------|--------|--------|--------|--------|--------|--------|--------|
+|OUT|Internal|External|TCP|>1023|21|1/0|Permit|
+|IN|External|Internal|TCP|21|>1023|1|Permit|
+|OUT|Internal|External|TCP|>1023|>1023|1/0|Permit|
+|IN|External|Internal|TCP|>1023|>1023|1|Permit|
+|ANY|ANY|ANY|ANY|ANY|ANY|*|DENY|
+
+### **RPC**
+Il server RPC (attraverso il servizio Portmapper, nel caso UNIX), determina dinamicamente la porta (> 1023) da assegnare al servizio RPC e quindi non si conosce a priori la porta che il server RPC assegnerà al servizio.
+
+|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
+|--------|--------|--------|--------|--------|--------|--------|--------|
+|IN|External|rpcSrv|TCP|>1023|111|1/0|Permit|
+|OUT|rpcSrv|External|TCP|111|>1023|1|Permit|
+|IN|External|rpcSrv|TCP|>1023|ANY|1/0|Permit|
+|OUT|rpcSrv|External|TCP|ANY|>1023|1|Permit|
+|ANY|ANY|ANY|ANY|ANY|ANY|*|DENY|
