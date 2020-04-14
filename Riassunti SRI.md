@@ -1,5 +1,5 @@
 # **Integrità e autenticazione del messaggio**
->Non è possibile per due persone comunicare in modo sicuro su un canale sicuro utilizzando la crittografia.
+>Non è possibile per due persone comunicare in modo sicuro su un canale insicuro utilizzando la crittografia.
 
 Non viene garantità ne l'integrità (messaggio intercettato da terzi e riutilizzato da quest'ultimi) ne l'autenticazione (no vi è sicureza sull'identità del mittente).
 
