@@ -432,7 +432,7 @@ Estensioni:
 - Altri...
 
 # **Firewall**
-Un **firewall** (letteralmente porta tagliafuoco) è un dispositivo di rete che **filtra tutto il traffico** che lo attraversa in base a una specifica politica d’accesso (**policy**). Si trova al confine fra due reti e tutto il traffico in transito tra le due reti deve passare attraverso di esso.  
+Un **firewall** (letteralmente porta tagliafuoco) è un dispositivo di rete che **filtra tutto il traffico** che lo attraversa in base a una specifica politica d’accesso (**policy**). Si trova al confine fra due reti e tutto il traffico in transito tra le due reti deve passare attraverso di esso.  
 - Protegge gli host di una rete fidata dal traffico ostile proveniente da una rete esterna o pubblica.
 - Affinché possa svolgere in modo corretto il proprio compito deve essere collocato al confine delle due reti e rappresentare l’unico punto di accesso alla rete da proteggere : non deve essere possibile scavalcare il firewall tramite altri punti d’accesso (es. rete).
 
