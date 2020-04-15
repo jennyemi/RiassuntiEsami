@@ -458,17 +458,17 @@ I firewall di livello applicativo lavorano a livello applicativo.
 Quindi:  
 - a livello applicativo (application gateway, proxy)
 - a livello di trasporto (circuit gateway)
-- a livello rete (packet lter)
->Esistono anche ibridi: dynamic packet filter agiscono a livello rete e trasporto (e talvolta anche applicativo).
+- a livello rete (packet filter)
+>Esistono anche ibridi: dynamic packet filter agiscono a livello rete e trasporto (e talvolta anche applicativo).
 Possono essere realizzati via software o hardware (più veloci,
-ma più costosi e meno flessibili nelle congurazioni).
+ma più costosi e meno flessibili nelle configurazioni).
 
 |Rete Esterna|router|gatekeeper|gate|mailgate|Rete Interna|
 - **Gatekeeper proxy applicativo**: raccoglie le richieste
 applicative (Telnet, FTP, SMTP, ...) dall'interno e le manda verso l'esterno.
-- **Gate**: filtra il traffico.
+- **Gate**: filtra il traffico.
 
-Grazie al firewall:
+Grazie al firewall:
 - In tutte le sottoreti si possono definire politiche di accesso.
 - Solo i componenti esterni al firewall sono direttamente accessibili.
 - Possibile regolare la direzionalità delle connessioni.
@@ -493,7 +493,7 @@ Se un host della rete ha aperto una connessione in uscita verranno autorizzati i
 
 Questa tecnica è più onerosa ma flessibile.
 
-Operano un filtraggio applicativo analizzando il contenuto dei pacchetti e vengono talvolta detti **deep packet filters**.
+Operano un filtraggio applicativo analizzando il contenuto dei pacchetti e vengono talvolta detti **deep packet filters**.
 - Analisi del traffico applicativo, la cui liceità va valutata
 caso per caso
 - Generalmente basati su pattern matching di stringhe
@@ -506,7 +506,7 @@ Solitamente con metodi basati su pattern matching di stringhe o anomaly detectio
 
 Sono firewall meno efficienti in termini di performance: per ottenere buone prestazioni (elevata larghezza di banda).
 ### **Scrrened subnet**
-Si usano due firewall per creare una zona di interdizione.
+Si usano due firewall per creare una zona di interdizione.
 
 ### **Zone di sicurezza: DMZ**
 I firewall consentono di definire delle politiche di accesso realizzando una separazione in zone aventi diverso grado di sicurezza nell'architettura di rete.
@@ -567,7 +567,7 @@ Le ACL possono essere realizzate utilizzando due strategie:
 |...|...|...|...|...|...|...|...|
 
 - **Varibili**: è molto diffuso l’uso delle variabili nelle ACL per indicare indirizzi IP (singoli o intere sottoreti); questo consente la modifica dei valori senza dover modificare la politica (es. INTERNA:= 192.168.0.0/24). Possono essere
-istanziate sulla specica topologia di rete.
+istanziate sulla specifica topologia di rete.
 - **Verso**: IN / OUT oppure l’indicazione delle zone sorgente e destinazione precedentemente definite in variabili.
 - **IP Sorgente/IP Destinazione**: IP da analizzare (livello rete) o variabili precedentemente definite.
 - **Protocollo**: TCP, UDP, ICMP, IP.
@@ -575,13 +575,13 @@ istanziate sulla specica topologia di rete.
 - **Ack**: 0 (aperture di connessione, SYN=1, ACK=0), 1 (no pacchetti di apertura connessione) o 0/1 (tutto il traffico).
 - **Azione**: Deny/Permit
 
-### **Protocolli firewall-friendly**
+### **Protocolli firewall-friendly**
 Protocolli come Telnet, SSH, rlogin, etc. sono semplici da gestire:
-- Per loro natura implicano ruoli ben definiti del client e
+- Per loro natura implicano ruoli ben definiti del client e
 server.
 - Il pattern di scambio di messaggi è un semplice request/reply.
 In generale invece esistono protocolli molto più elaborati che
-richiedono politiche assai più sofisticate per applicare il LPP.
+richiedono politiche assai più sofisticate per applicare il LPP.
 ### **Esempio TELNET**
 Vogliamo definire una ACL autorizzare solo connessioni Telnet dall’interno della rete aziendale verso uno specifico server telnet e bloccare il resto del traffico
 
@@ -595,7 +595,7 @@ Telnet è un protocollo di livello applicativo che utilizza una sola connessione
 |ANY|ANY|ANY|ANY|ANY|ANY|ANY|DENY|
 
 Se il protocollo di livello trasporto considerato è TCP, definire il valore del flag ACK nelle ACL è importante per ottenere politiche restrittive.
-### **SSH con stateless filtering**
+### **SSH con stateless filtering**
 La politica da implementare autorizza solo connessioni SSH dall'interno della rete aziendale verso l'esterno.
 
 Identichiamo SSH con i pacchetti TCP con porta destinazione 22 (si noti che talvolta si cambia la porta proprio per ragioni di sicurezza!)
@@ -611,8 +611,8 @@ Inoltre solo alcuni server ssh potrebbero essere autorizzati.
 
 ### **SMTP**
 Nella rete aziendale un solo server SMTP è autorizzato a gestire la posta elettronica con l'esterno.
-> **SMTP** è un protocollo firewall-friendly.  
-Client interni alla rete non passano per il firewall.
+> **SMTP** è un protocollo firewall-friendly.  
+Client interni alla rete non passano per il firewall.
 Si vuole:
 - Scambiare posta elettronica: un Mail Server riceve e invia posta da e verso altri Mail Server.
 - Ricevere posta elettronica: altri Mail Server si connettono al Mail Server aziendale agendo da client.
