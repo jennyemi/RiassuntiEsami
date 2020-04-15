@@ -59,7 +59,7 @@ attraverso i linguaggi di scripting Web server side (il linguaggio
 PHP implementa nativamente la funzione MD5).
 - È stato ampiamente usato fino a quando sono state dimostrate
 alcune sue debolezze crittografiche per le quali non è più
-considerato sicuro in applicazioni critiche
+considerato sicuro in applicazioni critiche.  
 Funzionamento:
 - Il messaggio viene diviso in blocchi da 512 bit.
 - Ogni blocco viene elaborato in 4 “round” successivi.
