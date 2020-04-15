@@ -634,6 +634,7 @@ External := not(159.149.70.0/24)
 Non è un protocollo firewall-frindly
 - Primo scambio di messagi su porta 21 provenienti da una porta alta.
 - Poi dalla 20 verso una porta alta.
+
 |**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**| |--------|--------|--------|--------|--------|--------|--------|--------|
 |OUT|Internal|External|TCP|>1023|21|1/0|Permit|
 |IN|External|Internal|TCP|21|>1023|1|Permit|
