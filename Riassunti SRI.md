@@ -149,7 +149,7 @@ Funzioni:
 - Per verificare: Verify(Key, x, m) ----> OK se x = Sign(key^-1, m)
 
 Resistente alla contraffazione:
--Non si riesce a calcolare Sign(key^-1, m) da m e key
+- Non si riesce a calcolare Sign(key^-1, m) da m e key
 - Resiste all'attacco a forza brutta
 
 ### **Creazione della firma**
