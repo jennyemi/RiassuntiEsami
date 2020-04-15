@@ -605,6 +605,7 @@ sshSrvs := 159.149.70.13 and 159.149.70.42
 |OUT|INTERNA|sshSrvs|TCP|>1023|22|1/0|Permit|
 |IN|sshSrvs|INTERNA|TCP|22|>1023|1|Permit|
 |ANY|ANY|ANY|ANY|ANY|ANY|*|DENY|
+
 Si nota che i pacchetti provenienti dall'esterno della rete dovrebbero essere solo risposte del server: quindi ACK deve essere settato.  
 Inoltre solo alcuni server ssh potrebbero essere autorizzati.
 >Molto difficile da applicare: c'è una costante tensione fra essibilità e sicurezza.
