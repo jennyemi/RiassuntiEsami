@@ -493,7 +493,7 @@ Se un host della rete ha aperto una connessione in uscita verranno autorizzati i
 
 Questa tecnica è più onerosa ma flessibile.
 
-Operano un filtraggio applicativo analizzando il contenuto dei pacchetti e vengono talvolta detti **deep packet filters**.
+Operano un filtraggio applicativo analizzando il contenuto dei pacchetti e vengono talvolta detti **deep packet filters**.
 - Analisi del traffico applicativo, la cui liceità va valutata
 caso per caso
 - Generalmente basati su pattern matching di stringhe
