@@ -622,8 +622,7 @@ Si vuole:
 smtpSrv := 159.149.70.23  
 External := not(159.149.70.0/24)
 
-|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
-|--------|--------|--------|--------|--------|--------|--------|--------|
+|**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**| |--------|--------|--------|--------|--------|--------|--------|--------|
 |IN|External|smtpSrv|TCP|>1023|25|1/0|Permit|
 |OUT|smtpSrv|External|TCP|25|>1023|1|Permit|
 |OUT|smtpSrv|External|TCP|>1023|25|1|Permit|
