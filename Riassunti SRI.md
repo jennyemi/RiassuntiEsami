@@ -7,7 +7,7 @@ Problemi:
 - I contenuti dei file sono poco legati fra loro.
 - Uso di block chipers
 
-Si ricorre a una one-way function, detta anche **hash function**, **checksum** o **message digest**; i dati in input di lunghezza arbitraria vengono trasformati output di lunghezza costante.  
+Si ricorre a una one-way function, detta anche **hash function**, **checksum** o **message digest**; i dati in input di lunghezza arbitraria vengono trasformati in output di lunghezza costante.  
 h: {0, 1}*--> {0, 1}^n  
 One-way = irreversibile  
 - Dato x è facile calcolare h(x)
@@ -59,7 +59,8 @@ attraverso i linguaggi di scripting Web server side (il linguaggio
 PHP implementa nativamente la funzione MD5).
 - È stato ampiamente usato fino a quando sono state dimostrate
 alcune sue debolezze crittografiche per le quali non è più
-considerato sicuro in applicazioni critiche.  
+considerato sicuro in applicazioni critiche.
+
 Funzionamento:
 - Il messaggio viene diviso in blocchi da 512 bit.
 - Ogni blocco viene elaborato in 4 “round” successivi.
