@@ -80,6 +80,7 @@ Il primo produce un **digest del messaggio** di soli 160 bit, mentre gli altri p
 - L'SHA 1 è il più diffuso algoritmo della famiglia SHA ed è utilizzato in numerose applicazioni e protocolli.
 - SHA 3 (Secure Hash Algorithm 3) è l'ultimo membro della famiglia di standard Secure Hash Algorithm, rilasciato dal NIST il 5 agosto 2015.
 - L’abbassamento dei costi accompagnato da maggiori potenze di calcolo ha reso l’SHA 1 veramente pericoloso per la sicurezza dei sistemi. I ricercatori raccomandano per questo che ci sia quanto prima una migrazione verso SHA 2 o SHA 3, i principali browser hanno programmato di smettere di accettare le firme basate su SHA 1 a partire da gennaio del 2017.
+
 Funzionamento:
 - Il messaggio viene elaborato in blocchi di 512 bit (16 word da 32 bit)  
 Vi sono 4 fasi da 20 passi:
