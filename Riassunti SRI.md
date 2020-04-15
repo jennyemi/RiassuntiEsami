@@ -452,7 +452,7 @@ I firewall possono essere di tipo diverso:
 
 >Il firewall realizza una separazione in zone con diverso grado di sicurezza all’interno di una rete
 
-I firewall hanno una diversa complessità (e costo ) a seconda del tipo di servizio implementato e del livello a cui lavorano nello stack di rete.  
+I firewall hanno una diversa complessità (e costo) a seconda del tipo di servizio implementato e del livello a cui lavorano nello stack di rete.  
 I firewall più semplici di tipo packet filter lavorano a livello di rete oppure a livello di rete/ trasporto.  
 I firewall di livello applicativo lavorano a livello applicativo.  
 Quindi:  
@@ -469,8 +469,8 @@ applicative (Telnet, FTP, SMTP, ...) dall'interno e le manda verso l'esterno.
 - **Gate**: filtra il traffico.
 
 Grazie al firewall:
-- In tutte le sottoreti si possono definire politiche di accesso.
-- Solo i componenti esterni al firewall sono direttamente accessibili.
+- In tutte le sottoreti si possono definire politiche di accesso.
+- Solo i componenti esterni al firewall sono direttamente accessibili.
 - Possibile regolare la direzionalità delle connessioni.
 - Realizza una separazione in zone
 
@@ -598,7 +598,7 @@ Se il protocollo di livello trasporto considerato è TCP, definire il valore del
 ### **SSH con stateless filtering**
 La politica da implementare autorizza solo connessioni SSH dall'interno della rete aziendale verso l'esterno.
 
-Identichiamo SSH con i pacchetti TCP con porta destinazione 22 (si noti che talvolta si cambia la porta proprio per ragioni di sicurezza!)
+Identifichiamo SSH con i pacchetti TCP con porta destinazione 22 (si noti che talvolta si cambia la porta proprio per ragioni di sicurezza!)
 sshSrvs := 159.149.70.13 and 159.149.70.42
 |**Verso**|**IP Sorgente**|**IP Destinazione**|**Protocollo**|**Porta Sorgente**|**Porta Destinazione**|**Flag ACK**|**Azione**|
 |--------|--------|--------|--------|--------|--------|--------|--------|
