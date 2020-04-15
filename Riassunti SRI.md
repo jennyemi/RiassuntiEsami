@@ -102,9 +102,10 @@ Esempi: MD4, MD5 (Message digest. 128 bit digest), SHA/SHS (Secure Hash Algorith
 Usato per message integrity e authentication
 ### **MAC Message Authentication Code**
 Si tratta di una **One-way keyed function**, richiede una chiave segreta condivisa.
+
 Utilizzo:
 - Il mittente spedisce il messaggio m e M1=MAC(m)
--Il destinatario riceve entrambe le parti
+- Il destinatario riceve entrambe le parti
 - Il destinatario calcola M2=MAC(m)  
 Se M2 == M1 il messaggio è valido  
 Se M2 != M1 il messaggio è corrotto
@@ -114,11 +115,10 @@ Il MAC viene utilizzato per l'integrità, non per la segretezza.
 Nel file system:
 |............FILE............|hpwd(pwd in piccolo)(file)|
 - Il MAC viene verificato quando si vuole accedere al file
--La pwd è la password necessaria per modificare il file
+- La pwd è la password necessaria per modificare il file
 
 Il MAC è sostanzialmente un checksum crittografico: condensa un messaggio di lunghezza variabile, utilizza una data chiave segreta K e il MAC ha lunghezza fissa.
->Il MAC in cui si utilizza anche una funziona di Hash viene più
-propriamente denominato HMAC (Hash based MAC).
+>Il MAC in cui si utilizza anche una funziona di Hash viene più propriamente denominato HMAC (Hash based MAC).
 # **Firma digitale**
 La **firma digitale**, equivalente elettronico della firma autografa su carta, è associata stabilmente al documento elettronico sulla quale è apposta e ne attesta con certezza l’integrità, autenticità e la non ripudiabilità. Crittografia assimetrica e ottiene solo **autenticazione** e **integrità**.
 
