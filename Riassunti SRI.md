@@ -120,12 +120,10 @@ Nel file system:
 Il MAC è sostanzialmente un checksum crittografico: condensa un messaggio di lunghezza variabile, utilizza una data chiave segreta K e il MAC ha lunghezza fissa.
 >Il MAC in cui si utilizza anche una funziona di Hash viene più propriamente denominato HMAC (Hash based MAC).
 # **Firma digitale**
-La **firma digitale**, equivalente elettronico della firma autografa su carta, è associata stabilmente al documento elettronico sulla quale è apposta e ne attesta con certezza l’integrità, autenticità e la non ripudiabilità. Crittografia assimetrica e ottiene solo **autenticazione** e **integrità**.
+La **firma digitale**, equivalente elettronico della firma autografa su carta, è associata stabilmente al documento elettronico sulla quale è apposta e ne attesta con certezza **l’integrità**, **autenticità** e la **non ripudiabilità**.
 
-La firma digitale viene utilizzata per garantire l’ autenticità
-di un messaggio (provenienza dall’utente dichiarato), senza
-ricorrere alla crittazione dell’intero messaggio, utilizzando la
-chiave privata del mittente e permettendo al destinatario di
+La firma digitale viene utilizzata per garantire l’ autenticità di un messaggio (provenienza dall’utente dichiarato), senza
+ricorrere alla crittazione dell’intero messaggio, utilizzando la chiave privata del mittente e permettendo al destinatario di
 verificare tale autenticità.
 
 Per generare una firma digitale è necessario un **kit** (dispositivo + software).
