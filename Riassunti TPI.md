@@ -25,7 +25,7 @@ I componenti chiave di una SOA sono quindi:
 - gli agenti che forniscono e usano servizi.
 - i messaggi scambiati dai servizi.
 - i meccanismi di comunicazione che permettono lo scambio dei messaggi.
-- opzionalmente, i descrittori dei servizi
+- opzionalmente, i descrittori dei servizi.
 
 Per ciascuno di questi elementi esistono vari standard di implementazione/realizzazione, pubblici o proprietari. Ovviamente l'enfasi attuale è sugli standard pubblici e aperti.
 
@@ -100,3 +100,326 @@ Esistono due principali architetture per i WS:
 - **SOA**: architettura complessa, più completa, strutturata, basata su un insieme di protocolli tra cui SOAP, WSDL, UDDI; è usata per lo scambio di messaggi per l’invocazione di servizi remoti e si prefigge di riprodurre in ambito Web un approccio a chiamate remote
 - **REST** (Web API): più semplice e leggera, si concentra sulla descrizione di risorse, sul modo di individuarle nel Web e sul modo di trasferirle da una macchina all’altra.
 
+# **RESTful Web Services**
+>**REpresentational State Transfer (REST)**: insieme di principi architetturali per la progettazione di Web Services che permettano la manipolazione di risorse.
+
+Una **risorsa** è un oggetto o la rappresentazione di qualcosa di significativo nel dominio applicativo.  
+È possibile interagire con le risorse attraverso le **API**.  
+Esempio: Un Libro, un Ordine, un Post e qualsiasi altra entità che si possa astrarre da un determinato contesto.  
+Il concetto di risorsa è quindi molto simile a quello di oggetto nel mondo della programmazione ad oggetti.
+
+**REST** è uno **stile architetturale** che offre dei principi guida per la realizzazione di "un’architettura di sistema":
+- non si riferisce ad un sistema concreto e ben definito, non si tratta di un protocollo, non è uno standard stabilito da un organismo di standardizzazione.
+- non dipende da alcuna piattaforma o tecnologia specifica, ma è un insieme di principi architetturali da seguire per la progettazione di WS.
+
+La sua definizione è apparsa per la prima volta nel 2000 nella tesi di Roy Fielding,“Architectural Styles and the Design of Network-based Software
+Architectures", in cui si analizzavano alcuni principi alla base di diverse architetture software, tra cui appunto i principi di un’architettura software che consentisse di vedere il Web come una piattaforma per l’elaborazione distribuita.
+
+### **Principi REST**
+REST si basa sul concetto di risorsa: ogni componente del sistema è una risorsa accessibile e manipolabile tramite metodi dello standard HTTP (ma attenzione: l’uso del protocollo HTTP non è obbligatorio, si possono utilizzare altri protocolli, es. SMTP).
+
+REST rappresenta dunque un’astrazione degli elementi di un’architettura all’interno di un sistema hypermedia distribuito.
+
+**REST specifica i ruoli dei componenti**, i vincoli sulla loro interazione con altri componenti e la loro interpretazione.
+
+REST definisce il Web come una **hypermedia application** le cui risorse collegate comunicano scambiandosi rappresentazioni dello stato delle risorse stesse.
+
+>REST si fonda sul principio **ROA** (Resource Oriented Architecture): un insieme di linee guida per implementare un web service RESTful.
+
+Mentre REST viene definito come stile architetturale
+**RESTful** viene in genere utilizzato per fare riferimento a servizi Web che implementano l’architettura REST. Esempio per riferirsi alle API di un servizio REST.
+
+L’architettura REST fornisce dei principi guida per lo sviluppo di applicazioni distribuite:
+- Interazione client server
+- Stateless Interactions (Comunicazione stateless
+- Uniform Interface (Uso esplicito di metodi HTTP
+- Resource Identification (identificazione univoca delle risorse)
+- Self Descriptive Messages autodescrizione delle risorse)
+- Hypermedia As The Engine Of Application State
+(Collegamenti tra le risorse)
+- Verranno analizzate singolarmente nelle prossime slide.
+
+### **Interazione Client-Server**
+
+REST applica il paradigma SoC (Separation of Concerns, separazione dei compiti) con un architettura Client-Server.  
+Ciò aiuta a stabilire un’architettura distribuita, supportando in tal modo l’evoluzione indipendente della logica lato client e della logica lato server.
+
+Il vincolo Client-Server prevede che il server offra una o più funzionalità e ascolti le richieste di possibili client.  
+I client invocano il servizio messo a disposizione dal server inviando il
+corrispondente messaggio di richiesta e il servizio, lato server, respinge la richiesta o esegue l’attività richiesta prima di inviare un messaggio di risposta al client.
+
+>La gestione delle eccezioni è delegata al client.
+
+### **Stateless Interactions**
+
+>Si tratta del principio che stabilisce la necessità di avere una comunicazione stateless, senza stato, cioè una comunicazione tra client e server in cui ciascuna richiesta è indipendente dalle altre.
+
+Ogni richiesta dal client al server deve contenere le informazioni necessarie per capire completamente la richiesta, indipendentemente da qualunque richiesta precedente.
+
+**Non significa applicazioni stateless!**
+
+L’idea del REST è quella di evitare transazioni di lunga durata nelle applicazioni.
+
+Una comunicazione senza stato consente di ottimizzare le prestazioni del Web Service e di semplificare la progettazione e l’implementazione dei componenti lato server, perchè l’assenza della gestione dello stato rimuove la necessità
+di sincronizzare dati di sessione con un’applicazione esterna: ciò significa che viene favorita la scalabilità orizzontale dell’applicazione.
+
+**Vantaggio**: se un’applicazione si troverà a dover gestire un picco di richieste, sarà sufficiente aggiungere un nuovo server a quelli esistenti e poter rispondere alle richieste dei client senza dover gestire problematiche di sincronizzazione delle sessioni (questa possibilità può essere facilmente sfruttata in ambienti come le architetture cloud).
+
+>Esempio: banale applicazione per la richiesta di una pagina da un insieme numerato in un sistema che richiede la gestione delle sessioni con i client.
+- Stateful design
+- Il server deve memorizzare l’ultima pagina richiesta dal client.
+- Richiede sincronizzazione.
+
+>Esempio: banale applicazione per la richiesta di una pagina da un insieme numerato in un sistema con **stateless interactions**.
+- Stateless design
+- Il server genera una risposta che collega alla pagina successiva.
+- È il client a fornire nella richiesta il numero della pagina da ottenere senza richiedere al server di ricordare la pagina richiesta in precedenza.
+
+**Server**:
+- Deve generare risposte che contengono links ad altre risorse per consentire la navigazione tra le stesse.
+-Genera risposte che indicano se possono essere memorizzate in una cache o meno per ridurre il numero di richieste per risorse duplicate.
+
+**Client**:
+- Invia richieste complete che possono essere gestite indipendentemente dalle altre.
+- Usa le informazioni del server per determinare se
+porre la risposta in una cache o meno.
+
+### **Uniform Interface**
+Unico insieme di operazioni (verbi) che si applica a tutte le azioni (es. GET, PUT, DELETE, …)
+- I verbi sono universali e non sono inventati in base all’applicazione; se servono nuovi verbi a molte applicazioni, l’interfaccia può essere estesa.
+
+- I verbi sono le azioni possibili: **metodi HTTP**  
+Quando inseriamo un URI nella barra degli indirizzi di un browser stiamo in realtà chiedendo al browser di eseguire un metodo HTTP sulla risorsa individuata dall’URI.
+
+### **Uso di HTTP**
+- I servizi web RESTful fanno, uso del protocollo HTTP come mezzo di comunicazione tra client e server.
+- Un client invia un messaggio in forma di una richiesta HTTP e il server risponde in forma di una risposta HTTP.
+
+**Richiesta HTTP**:
+- **Verb**--> Indica uno dei metodi HTTP come GET,
+POST, DELETE, PUT ecc.
+- **URI**--> Uniform Resource Identifier, per
+identificare la risorsa sul server.
+- **HTTP Version**--> Indica la versione HTTP, per esempio, HTTP v 1 1.
+- **Request Header**--> Contiene i metadati per il
+messaggio di richiesta HTTP come coppie chiave-valore. Ad esempio, tipo del client (o browser), formato supportato dal client, il formato del corpo del messaggio, ecc.
+- **Request Body**--> Contenuto del messaggio
+restituzione della rappresentazione delle
+risorse (es. JSON di risposta).
+
+**Risposta HTTP**
+- **Status/Response Code**--> indica lo stato del
+server per la risorsa richiesta.
+- **HTTP Version**--> Indica la versione di HTTP.
+- **Response Header**--> Contiene i metadati per il
+messaggio di risposta HTTP come coppie chiave-valore; Ad esempio, la lunghezza dei contenuti, tipo di contenuto, la data della risposta, il tipo di server, ecc.
+- **Response Body**--> Contenuto del messaggio di
+risposta o rappresentazione della risorsa.
+
+### **Metodi HTTP**
+I metodi HTTP permettono di effettuare operazioni sulla risorsa indicata dall’URI.
+
+Si stabilisce una **mappatura uno a uno** tra le
+tipiche **operazioni CRUD** (Create, Read, Update,
+Delete) che possono essere effettuate sulle
+risorse e i metodi HTTP.
+
+|**Metodo HTTP**|**Operazione CRUD**|**Descrizione**|
+|--------|--------|--------|
+|POST|Create|Crea una nuova risorsa|
+|GET|Read|Ottiene una risorsa esistente (rappresentazione)|
+|PUT/PATCH|Update|Aggiorna una risorsa o ne modifica lo stato|
+|DELETE|Delete|Elimina una risorsa|
+
+### **Metodo GET**
+- Operazione di sola lettura.
+- Si comporta come l’operazione di SELECT in un database.
+- Applicata su URL rappresentanti risorse (es. http ://server.net/servizio/utenti/).
+
+--> In SQL corrisponde a : SELECT * FROM utenti WHERE ID =“U01".  
+--> **Input** : accept Header con i media types accettabili per la risorsa.  
+--> **Output** : la rappresentazione della risorsa nel media type scelto.
+
+- Applicata su URL rappresentanti collezioni di risorse
+(es. http ://server.net/servizio/utenti?nome=pinco&cognome=pallino).  
+
+--> In SQL corrisponde a: SELECT FROM utenti WHERE nome="pinco" AND cognome="pallino".  
+--> **Input** : eventuale query string con cui filtrare la collezione e nell’ Accept header i media types accettabili per la risorsa.  
+--> **Output** : lista delle url delle risorse (non le risorse stesse) nella collezione.
+
+- Applicata su URL rappresentanti attributi di risorse
+(http://server.net/servizio/utenti/U01/nome).
+
+--> In SQL corrisponde a: SELECT nome FROM utenti WHERE ID =“U01”.  
+--> **Input**: Accept Header con i media types accettabili per la risorsa.  
+--> **Output**: la rappresentazione dell’attributo nel media type scelto.
+
+**Metodo PUT**
+- Si usa per aggiornare una risorsa preesistente (cambiarne lo stato).
+- Equivale all’ UPDATE in un database SQL.
+- Applicata su URL rappresentanti risorse (es.http://server.net/servizio/utenti/U01).
+
+In SQL corrisponde a : UPDATE utenti SET… WHERE ID="U01".  
+**Input**:  
+--> Content type nell’header: media type con cui si sta trasmettendo la risorsa.  
+--> Nel payload è contenuta la rappresentazione della risorsa che verrà interamente sovrascritta a quella indicata nell’URL, codificata nel modo dichiarato. È possibile trasmettere una rappresentazione completa o
+parziale, per sostituire tutta la risorsa o solo gli attributi specificati.
+
+**Output**:  
+--> Return Status: 204 NO_CONTENT se la richiesta è stata servita.
+
+- Su URL rappresentanti collezioni di risorse
+(http://server.net/servizio/utenti). 
+
+**Input**:  
+--> Content-type nell’header: media type con cui si sta trasmettendo la risorsa.
+--> Payload contenente una rappresentazione di una lista di risorse, codificata opportunamente. L’intero contenuto verrà cancellato e sostituito dagli item indicati.  
+**Output**:  
+--> Return Status: 204 NO_CONTENT se la richiesta è stata servita.
+
+### **Metodo PATCH**
+Si usa per aggiornare parti di una risorsa preesistente (partial update).
+- Equivale all’ UPDATE in un database SQL.
+- Applicata su URL rappresentanti risorse (es. http://server.net/servizio/utenti/U01).
+
+In SQL corrisponde a UPDATE utenti SET nome =… WHERE ID = "U01"
+**Input**:  
+--> Content type nell’header : media type con cui si sta trasmettendo la risorsa.  
+--> Payload contenente una rappresentazione dell’attributo o degli attributi da sovrascrivere, codificato opportunamente nel formato indicato in Content type.  
+**Output**:  
+-->Return Status: 204 NO_CONTENT se la richiesta è stata servita.
+
+### **Metodo POST**
+- Si usa per creare una nuova entry di risorsa nella collezione.
+- Equivale all’ operazione INSERT in un database SQL.
+- Su URL rappresentanti collezioni di risorse (http://server.net/servizio/utenti)
+
+In SQL corrisponde : INSERT INTO utenti VALUES(…).  
+**Input**:  
+--> Content type nell’header: media type con cui si sta trasmettendo la risorsa.  
+--> Payload contenente una rappresentazione della risorsa da aggiungere, codificata opportunamente.  
+**Output**:  
+--> URL utilizzabile per accedere alla risorsa appena inserita.  
+--> Location nell’header impostato con tale URL.  
+--> Return Status: 201 CREATED se la richiesta è stata servita.
+
+### **Metodo DELETE**
+- Si usa per rimuovere una risorsa da una collezione o per svuotare la collezione.
+- Equivale all'operazione DELETE in un database SQL.
+- Su URL rappresentanti collezioni di risorse (http://server.net/servizio/utenti)    
+--> In SQL corrisponde: DELETE FROM utenti  
+--> **Output**. Return Status: 204 NO_CONTENT se la richiesta è stata servita.
+- Su URL rappresentanti risorse (http://server.net/servizio/utenti/U01)  
+-->In SQL corrisponde : DELETE FROM utenti WHERE ID = "U01".  
+--> **Output**. Return Status: 204 NO_CONTENT se la richiesta è stata servita.
+
+### **Resource Identification**
+>Le risorse sono gli elementi fondamentali su cui si basano i Web Service RESTful.
+
+Per **risorsa** si intende un qualsiasi elemento oggetto di elaborazione che possa essere indirizzabile tramite Web, cioè accessibile e trasferibile tra client e server.
+
+Il concetto di risorsa è molto simile al concetto di oggetto nel mondo della programmazione ad oggetti.
+
+Una risorsa può essere rappresentata in molti modi
+diversi.  
+Ad esempio come HTML, XML, JSON o anche come file
+JPEG. La rappresentazione più famosa utilizzata nelle
+implementazioni REST è il JSON.
+
+Ogni risorsa deve essere identificata univocamente sul
+Web, il meccanismo più idoneo per individuare una
+risorsa è dato dal concetto di **URI** (Universal Resource Identifier)  
+- Il principale beneficio nell’adottare lo schema URI per identificare le risorse consiste nel fatto che esiste già, è ben definito e collaudato; non occorre pertanto inventar e un modo nuovo.
+
+Formato URI:
+< protocol>://< service-name>/< ResourceType>/< ResourceID>
+
+### **Resource Identification: struttura delle URL**
+>Gli **URI** per un web services devono essere intuitivi e facilmente identificabili.
+
+Nella progettazione di un WS RESTful occorre scegliere gli URI secondo le seguenti “best practices”:
+- Evitare gli spazi tra i nomi, preferendo l’uso dell’underscore (es. authorized_users).
+- Usare solo le lettere in minuscolo.
+- Evitare l’uso di verbi o nomi di operazioni (es. non usare get_users o /book?isbn=24&action=delete.
+- Mantenere la retrocompatibilità in caso di modifica o aggiornamento degli URI per consentire ai vecchi sistemi di continuare a funzionare. Un modo semplice per ottenere questo scopo è quello di utilizzare il versioning delle API come base dell’url (es. https://api.myservice.it/v1/orders).
+
+>**URI TEMPLATE**: Una tecnica per definire URI che includano parametri, che devono essere sostituiti prima di utilizzare l’URI.
+http://example.com/prodotti/{id}
+
+REST non specifica dettagli sugli URI.
+
+L’URI Template non è richiesto dal REST, in senso
+strettamente tecnico.
+- In termini pratici l’URI Template si rivela una best practice da seguire.
+
+>Gli URI Templates specificano come costruire ed effettuare il parsing di URI parametrici.
+
+Sul _server_ sono spesso usati per configurare "regole di routing" necessarie per elaborare la risposta basata sui parametri forniti dal client.  
+Sul _client_ sono utilizzati per istanziare URI a partire da parametri locali.
+
+Le risorse sono organizzate spesso in una struttura
+gerarchica tipo directory (che è spesso una vista
+sull’effettiva organizzazione dei dati), i cui elementi sono detti **collezioni**.
+
+- http://server.net/servizio/rest/utenti  
+Indica la collezione di tutti gli utenti (tabella di un database)
+- http://server.net/servizio/rest/utenti/U01  
+indica l’utente con identificativo U01 nella collezione
+
+È possibile avere URL con schema diverso da quello
+"collezione-risorsa-collezione".
+- http://server.net/servizio/rest/utenti/U01/nome  
+Non indica la sottocollezione nome dell’utente U01, ma si considera la risorsa utente U01 come collezione di attributi e se ne estrae quello chiamato nome
+- Si può usare una query string per simulare un’operazione di filtro quando la URL indica una collezione.  
+Es: http://server.net/servizio/rest/utenti?n=pinco&c=pallino
+
+### **Self Descriptive Messages**
+>Ogni messaggio contiene le informazioni necessarie per la propria gestione.
+
+Le risorse sono **entità astratte**.  
+- L’identificazione delle risorse garantisce che siano chiaramente identificate.  
+- L’accesso avviene attraverso un interfaccia uniforme.
+
+L’accesso alle risorse avviene usando la loro rappresentazione.
+- Ovvero lo stato attuale della risorsa.
+- Viene comunicato che tipo di rappresentazione utilizzare.
+- Il formato di rappresentazione è negoziabile tra pari.
+
+La rappresentazione delle risorse può essere basata su vincoli diversi.
+- XML e JSON possono rappresentare lo stesso modello.
+
+>Rapresentation rapresents Resource, URI Identifies Resource, URI dereference Rapresentation.
+
+### **Stato delle risorse e dell’applicazione**
+L’acronimo REST sta per REpresentational State Transfer e **sottolinea la centralità della gestione dello stato in un sistema distribuito**.
+
+Lo stato che REST prende in considerazione è quello
+delle risorse e dell’intera applicazione.
+
+A differenza di quanto avviene in buona parte delle applicazioni Web, dove lo stato dell’applicazione viene spesso mantenuto dal server insieme allo stato della comunicazione, **lo stato dell’applicazione in un’architettura RESTful è il frutto della collaborazione di client e server, ciascuno con i propri ruoli e responsabilità**.
+
+Esempio: gestione del carrello in una applicazione di e-commerce
+- Si può prevedere una risorsa carrello dedicata al mantenimento degli articoli scelti dal cliente.
+- Si tratta di una risorsa come le altre che non è associata alla sessione corrente di comunicazione e quindi accssibile tramite Uri in qualunque momento.
+
+### **HATEOAS**
+Dall’acronimo REST, Representational State Transfer, notiamo che in esso viene fatto riferimento al trasferimento di stato, cioè al fatto che un’applicazione passi **da uno stato all’altro**.
+
+Uno dei principi REST suggerisce l’uso di collegamenti tra risorse come modalità di transizione da uno stato all’altro: **Hypermedia As The Engine of Application State (HATEOAS)**.
+
+Sono trasferite rappresentazioni delle risorse contenenti link.
+- Il client può procedere al passo successivo dell’interazione scegliendo uno di questi link.
+
+Le risorse e lo stato possono essere utilizzate navigando i link.
+- I link possono interconnettere risorse navigabili.
+
+Le applicazioni RESTful _navigano_ invece di chiamare.
+- Le rappresentazioni contengono informazioni riguardo possibili attraversamenti.
+- Le applicazioni navigano alla prossima risorsa sulla base dei link semantici.
+- La navigazione può essere delegata, dato che tutti i link utilizzano identificatori.
+
+Nella visione REST, l’esecuzione di un’applicazione può essere rappresentata da una rete di risorse in cui un client naviga seguendo i collegamenti ammissibili tra una risorsa e l’altra.
+
+Sfruttando pienamente il principio HATEOAS è possibile creare servizi Web con scarso accoppiamento tra client e server.
+- Se il server riorganizza le relazioni tra le risorse, il client è in grado di trovare tutto ciò che serve nelle rappresentazioni ricevute.
+- Tutto quello che servirebbe ad un client è solo l’URI della risorsa iniziale.
