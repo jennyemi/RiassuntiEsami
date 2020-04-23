@@ -4,9 +4,9 @@
 
 Un sistema distribuito consiste in un insieme di **agenti software** distinti che lavorano insieme per implementare una determinata funzionalità. 
 
-Gli **agenti** di un sistema distribuito operano nello stesso ambiente, quindi devono comunicare tramite protocoli di rete.
+Gli **agenti** di un sistema distribuito operano nello stesso ambiente, quindi devono comunicare tramite protocolli di rete.
 
-La **comunicazione** via rete è poco affidabile:i disegner di sistemi distribuiti devono tener conto di elementi quali la **latenza**, **concorrenza**, **malfunzionamenti parziali e temporanei** ecc...
+La **comunicazione** via rete è poco affidabile: i disegner di sistemi distribuiti devono tener conto di elementi quali la **latenza**, **concorrenza**, **malfunzionamenti parziali e temporanei** ecc...
 
 ### **Service Oriented Architecture**
 >La **service oriented architecture** è un tipo di sistema distribuito in cui gli agenti sono servizi.  
