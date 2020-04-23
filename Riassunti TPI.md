@@ -131,13 +131,11 @@ Mentre REST viene definito come stile architetturale
 
 L’architettura REST fornisce dei principi guida per lo sviluppo di applicazioni distribuite:
 - Interazione client server
-- Stateless Interactions (Comunicazione stateless
-- Uniform Interface (Uso esplicito di metodi HTTP
-- Resource Identification (identificazione univoca delle risorse)
-- Self Descriptive Messages autodescrizione delle risorse)
-- Hypermedia As The Engine Of Application State
-(Collegamenti tra le risorse)
-- Verranno analizzate singolarmente nelle prossime slide.
+- Stateless Interactions (Comunicazione stateless).
+- Uniform Interface (Uso esplicito di metodi HTTP).
+- Resource Identification (identificazione univoca delle risorse).
+- Self Descriptive Messages (autodescrizione delle risorse).
+- Hypermedia As The Engine Of Application State (Collegamenti tra le risorse).
 
 ### **Interazione Client-Server**
 
