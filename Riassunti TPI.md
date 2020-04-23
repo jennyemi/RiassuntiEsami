@@ -44,7 +44,7 @@ Nel primo caso, i servizi sono solitamente implementati direttamente dai web ser
 Nel secondo caso, quello che ci interessa maggiormente, i servizi sono costituiti da software esterno che viene attivato dai web server in risposta a particolari messaggi.
 
 ### **Definizione di Servizio Web**
-un servizio web è un sistema software progettato per supportare **l'interazione interoperabile da macchina a macchina** su una rete. Ha un'interfaccia descritta in un formato elaborabile dalla macchina (WSDL). Altri sistemi interagiscono con il servizio Web nel modo prescritto dalla sua descrizione usando messaggi SOAP, tipicamente trasmessi usando HTTP con una serializzazione XML in combinazione con altri standard relativi al Web.
+Un servizio web è un sistema software progettato per supportare **l'interazione interoperabile da macchina a macchina** su una rete. Ha un'interfaccia descritta in un formato elaborabile dalla macchina (WSDL). Altri sistemi interagiscono con il servizio Web nel modo prescritto dalla sua descrizione usando messaggi SOAP, tipicamente trasmessi usando HTTP con una serializzazione XML in combinazione con altri standard relativi al Web.
 
 ### **Intrazione interoperabilità Machine-to-Machine**
 Lo scopo primario di un servizio web è fornire una via estremamente semplice e versatile per far comunicare componenti software attraverso la rete.
@@ -62,7 +62,7 @@ Queste applicazioni possono risiedere su diversi computer collegati da una rete 
 - **Il client invoca uno dei metodi del server**.
 - Come i metodi in una libreria di classi, i metodi di un servizio Web possono accettare un numero arbitrario di **parametri** di input e possono opzionalmente restituire un risultato.
 - Lo standard dei servizi Web indica in modo molto dettagliato come un client può invocare un metodo di servizio Web da un server.
-- Lo standard detta come i parametri di input e il ritorno i valori vengono passati da un computer all'altro, come i difetti vengono gestiti, e una miriade di altre complicazioni.
+- Lo standard detta come i parametri di input e i valori di ritorno vengono passati da un computer all'altro, vengono gestiti come i difetti , e una miriade di altre complicazioni.
 
 Nasce tutto dal concetto di **delegare** a qualcuno l'esecuzione di un compito. Nei linguaggi di prgrammazione l'applicazione di tale concetto si ha con la definizione e chiamata a sottoprogramma (procedure call).
 
