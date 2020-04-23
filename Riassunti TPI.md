@@ -232,14 +232,14 @@ risorse e i metodi HTTP.
 ### **Metodo GET**
 - Operazione di sola lettura.
 - Si comporta come l’operazione di SELECT in un database.
-- Applicata su URL rappresentanti risorse (es. http ://server.net/servizio/utenti/).
+- Applicata su URL rappresentanti risorse (es. http://server.net/servizio/utenti/U01).
 
 --> In SQL corrisponde a : SELECT * FROM utenti WHERE ID =“U01".  
 --> **Input** : accept Header con i media types accettabili per la risorsa.  
 --> **Output** : la rappresentazione della risorsa nel media type scelto.
 
 - Applicata su URL rappresentanti collezioni di risorse
-(es. http ://server.net/servizio/utenti?nome=pinco&cognome=pallino).  
+(es. http://server.net/servizio/utenti?nome=pinco&cognome=pallino).  
 
 --> In SQL corrisponde a: SELECT FROM utenti WHERE nome="pinco" AND cognome="pallino".  
 --> **Input** : eventuale query string con cui filtrare la collezione e nell’ Accept header i media types accettabili per la risorsa.  
@@ -280,7 +280,7 @@ Si usa per aggiornare parti di una risorsa preesistente (partial update).
 - Equivale all’ UPDATE in un database SQL.
 - Applicata su URL rappresentanti risorse (es. http://server.net/servizio/utenti/U01).
 
-In SQL corrisponde a UPDATE utenti SET nome =… WHERE ID = "U01"
+In SQL corrisponde a UPDATE utenti SET nome =… WHERE ID = "U01"  
 **Input**:  
 --> Content type nell’header : media type con cui si sta trasmettendo la risorsa.  
 --> Payload contenente una rappresentazione dell’attributo o degli attributi da sovrascrivere, codificato opportunamente nel formato indicato in Content type.  
@@ -318,15 +318,10 @@ Per **risorsa** si intende un qualsiasi elemento oggetto di elaborazione che pos
 
 Il concetto di risorsa è molto simile al concetto di oggetto nel mondo della programmazione ad oggetti.
 
-Una risorsa può essere rappresentata in molti modi
-diversi.  
-Ad esempio come HTML, XML, JSON o anche come file
-JPEG. La rappresentazione più famosa utilizzata nelle
-implementazioni REST è il JSON.
+Una risorsa può essere rappresentata in molti modi diversi.  
+Ad esempio come HTML, XML, JSON o anche come file JPEG. La rappresentazione più famosa utilizzata nelle implementazioni REST è il JSON.
 
-Ogni risorsa deve essere identificata univocamente sul
-Web, il meccanismo più idoneo per individuare una
-risorsa è dato dal concetto di **URI** (Universal Resource Identifier)  
+Ogni risorsa deve essere identificata univocamente sul Web, il meccanismo più idoneo per individuare una risorsa è dato dal concetto di **URI** (Universal Resource Identifier)  .
 - Il principale beneficio nell’adottare lo schema URI per identificare le risorse consiste nel fatto che esiste già, è ben definito e collaudato; non occorre pertanto inventar e un modo nuovo.
 
 Formato URI:
@@ -346,8 +341,7 @@ http://example.com/prodotti/{id}
 
 REST non specifica dettagli sugli URI.
 
-L’URI Template non è richiesto dal REST, in senso
-strettamente tecnico.
+L’URI Template non è richiesto dal REST, in senso strettamente tecnico.
 - In termini pratici l’URI Template si rivela una best practice da seguire.
 
 >Gli URI Templates specificano come costruire ed effettuare il parsing di URI parametrici.
@@ -356,8 +350,7 @@ Sul _server_ sono spesso usati per configurare "regole di routing" necessarie pe
 Sul _client_ sono utilizzati per istanziare URI a partire da parametri locali.
 
 Le risorse sono organizzate spesso in una struttura
-gerarchica tipo directory (che è spesso una vista
-sull’effettiva organizzazione dei dati), i cui elementi sono detti **collezioni**.
+gerarchica tipo directory (che è spesso una vista sull’effettiva organizzazione dei dati), i cui elementi sono detti **collezioni**.
 
 - http://server.net/servizio/rest/utenti  
 Indica la collezione di tutti gli utenti (tabella di un database)
