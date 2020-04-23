@@ -175,7 +175,7 @@ di sincronizzare dati di sessione con un’applicazione esterna: ciò significa 
 
 **Server**:
 - Deve generare risposte che contengono links ad altre risorse per consentire la navigazione tra le stesse.
--Genera risposte che indicano se possono essere memorizzate in una cache o meno per ridurre il numero di richieste per risorse duplicate.
+- Genera risposte che indicano se possono essere memorizzate in una cache o meno per ridurre il numero di richieste per risorse duplicate.
 
 **Client**:
 - Invia richieste complete che possono essere gestite indipendentemente dalle altre.
