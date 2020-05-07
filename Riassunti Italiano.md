@@ -60,11 +60,11 @@ Il compito della filosofi positivista era di unificare tutti i risultati delle s
 # **Le Avanguardie**
 
 Con il termine Avanguardie si indicano vari movimenti artistico-culturali, in Europa dai primi anni del Novecento (venti), avanguardie storiche.
-Le Avanguardie ha una tendenza a rompere con i codici artistici tradizionali e con le convenzione borghesi. Il loro contributo alla modernità è più incisivo, stimolate dall'avvento della civiltà delle macchine e delle nuove tecnologie che imprimevano una profonda accelerazioneal rinnovamento.
+Le Avanguardie ha una tendenza a rompere con i codici artistici tradizionali e con le convenzione borghesi. Il loro contributo alla modernità è più incisivo, stimolate dall'avvento della civiltà delle macchine e delle nuove tecnologie che imprimevano una profonda accelerazione al rinnovamento.
 
-Gli esponenti delle Avanguardie misero in discussione il valore assoluto dell'arte, rinnegando il concetto di arte priva di intenti etici e sociali, l'arte non deve essere fruita dal pubblico in maniera passiva, il ruolo dell'**artista** è quello di scuotere, sconvolgere, scatenare energie facendo in modo che l'arte esca dai musei e dalle accademie, per coinvogere e influenzare tutti i settori dell'esistenza, collaborando attivamente a transformarla e a migliorarla.
+Gli esponenti delle Avanguardie misero in discussione il valore assoluto dell'arte, rinnegando il concetto di arte priva di intenti etici e sociali. L'arte non deve essere fruita dal pubblico in maniera passiva, il ruolo dell'**artista** è quello di scuotere, sconvolgere, scatenare energie facendo in modo che l'arte esca dai musei e dalle accademie, per coinvogere e influenzare tutti i settori dell'esistenza, collaborando attivamente a transformarla e a migliorarla.
 
-Le Avanguardie valorizzano al massimo la ricerca di **nuove forme espresive**, facendo dello sperimentalismo e il loro orientamento metodologico.  
+Le Avanguardie valorizzano al massimo la ricerca di **nuove forme espresive**, facendo dello sperimentalismo il loro orientamento metodologico.  
 Gli artisti operavano in gruppi, raccolti intorno a programmi condivisi (poeti, scrittori, pittori, cineasti, musicisti).
 
 Caratteristiche comuni:
